@@ -18,17 +18,20 @@ if choice=="register":
         sql="insert into login(firstname,lastname,username,password) values(%s,%s,%s,%s)"
         cursor.execute(sql,(firstname,lastname,username,password))
         conn.commit()
-elif choice=="login":
-    st.header("login")
-    username=st.text_input("enter ur username")
-    password=st.text_input("enter password")
-    sql="select firstname,lastname from login where username=%s and password=%s"
-    cursor.execute(sql,(username,password))
-    data=cursor.fetchall()
-    col1,col2=st.columns(2)
-    if st.button("login"):
-        for i in data:
-            col1.header("first name")
-            col1.success(i[0])
-            col2.header("last name")
-            col2.success(i[1])
+elif choice == "login":
+    st.header("Login")
+    username = st.text_input("Enter your username")
+    password = st.text_input("Enter password", type="password")
+    col1, col2 = st.columns(2)
+    if st.button("Login"):
+        sql = "SELECT firstname, lastname FROM login WHERE username=%s AND password=%s"
+        cursor.execute(sql, (username, password))
+        data = cursor.fetchone()
+        if data:
+            col1.header("First Name")
+            col1.success(data[0])
+            col2.header("Last Name")
+            col2.success(data[1])
+        else:
+            st.error("Wrong username or password")
+
